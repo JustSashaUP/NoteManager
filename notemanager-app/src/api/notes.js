@@ -8,9 +8,9 @@ const api = axios.create({
 });
 
 export const notesApi = {
-  getAll: () => api.get('/').then(r => r.data),
+  getAll: () => api.get('').then(r => r.data),
   getById: (id) => api.get(`/${id}`).then(r => r.data),
-  create: (note) => api.post('/', note).then(r => r.data),
+  create: (note) => api.post('', note).then(r => r.data),
   update: (id, note) => api.put(`/${id}`, note).then(r => r.data),
   delete: (id) => api.delete(`/${id}`).then(r => r.data),
 };
