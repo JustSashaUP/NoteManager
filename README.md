@@ -1,4 +1,9 @@
 # NoteManager
+1. [Quick Start (Everything at once)](#Quick-Start)
+2. [Run Frontend Only](#Run-Frontend-Only)
+3. [Running E2E Tests](#Running-E2E-Tests-Cypress)
+4. [The API Test](#the-api-test)
+5. [Project Structure](#Project-Structure)
  
 Full-stack notes management application.
  
@@ -8,7 +13,7 @@ Full-stack notes management application.
  
 ---
  
-## Quick Start (Everything at once)
+## Quick Start
  
 Make sure you have **Docker** installed, then run:
  
@@ -26,45 +31,38 @@ docker-compose down
 ```
  
 ---
- 
-## Project Structure
- 
+## Running E2E Tests (Cypress)
+
+Make sure both the **backend** and the **frontend dev server** are running, then:
+
+```bash
+# Open the directory with the frontend part
+cd ./notemanager-app
+
+# Open Cypress interactive runner
+npm run cypress:open
+
+# Run headlessly (CI)
+npm run cypress:run
 ```
-NoteManager/
-├── notemanager-app/        ← Java Spring Boot backend
-├── notes-app/              ← React frontend
-├── docker-compose.yml      ← runs everything together
-└── README.md
-```
- 
+
+Tests are located in `cypress/e2e/notes.cy.js` and cover:
+
+- Viewing the notes list
+- Switching language
+- Creating a note
+- Validation (empty title)
+- Editing a note
+- Deleting a note
+
 ---
- 
+
 ## Run Frontend Only
  
-See [notes-app/README.md](./notemanager-app/README.md)
+See [notemanager-app/README.md](./notemanager-app/README.md)
 
 ---
-
-## Run Backend Only
-
-### Run with Docker (Recommended)
-
-```bash
-docker-compose up --build
-```
-
-API will be available at **http://localhost:8081**
-
-### Run Locally (Without Docker)
-
-Make sure you have **Java 17+** and **Maven** installed.
-
-```bash
-cd notemanager-app
-./mvnw spring-boot:run
-```
-
-### Example Requests
+## The API Test
 
 **Get all notes:**
 ```bash
@@ -89,6 +87,19 @@ curl -X PUT http://localhost:8081/notes/1 \
 ```bash
 curl -X DELETE http://localhost:8081/notes/1
 ```
+
+---
+ 
+## Project Structure
+ 
+```
+NoteManager/                ← Java Spring Boot backend
+├── notemanager-app/        ← React frontend
+├── docker-compose.yml      ← runs everything together
+└── README.md
+```
+ 
+---
 
 ### API Endpoints
 
