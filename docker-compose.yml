@@ -29,3 +29,15 @@ services:
       - pg_data:/var/lib/postgresql/data
     networks:
       - backend
+  
+  frontend:
+    build: ./notemanager-app
+    container_name: "noteManager-frontend"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - app
+    env_file:
+      - ./notemanager-app/.env
+    networks:
+      - backend
