@@ -1,0 +1,31 @@
+networks:
+  backend:
+
+volumes:
+  pg_data:
+
+services:
+  app:
+    build: .
+    container_name: "noteManager-app"
+    env_file:
+      - .env
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  db:
+    image: postgres:14
+    container_name: "noteManager-db"
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - backend
