@@ -41,11 +41,11 @@ NoteManager/
  
 ## Run Frontend Only
  
-See [notes-app/README.md](./notes-app/README.md)
+See [notes-app/README.md](./notemanager-app/README.md)
 
 ---
 
-## Backend
+## Run Backend Only
 
 ### Run with Docker (Recommended)
 
