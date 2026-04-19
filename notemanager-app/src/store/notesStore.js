@@ -18,7 +18,7 @@ export const useNotesStore = create((set, get) => ({
       const notes = await notesApi.getAll();
       set({ notes, loading: false });
     } catch (e) {
-      set({ error: e.message, loading: false });
+      set({ error: e.response?.data?.message || e.message, loading: false });
     }
   },
 
@@ -28,10 +28,15 @@ export const useNotesStore = create((set, get) => ({
       const note = await notesApi.create(data);
       set(s => ({ notes: [note, ...s.notes], loading: false }));
       get().setToast('noteCreated');
-      return note;
+      return { ok: true, note };
     } catch (e) {
-      set({ error: e.message, loading: false });
-      return null;
+      const errorResponse = e.response?.data;
+      set({ error: errorResponse?.message || e.message, loading: false });
+      return {
+        ok: false,
+        error: errorResponse?.errors || null,
+        message: errorResponse?.message || e.message,
+      };
     }
   },
 
@@ -44,10 +49,15 @@ export const useNotesStore = create((set, get) => ({
         loading: false,
       }));
       get().setToast('noteUpdated');
-      return note;
+      return { ok: true, note };
     } catch (e) {
-      set({ error: e.message, loading: false });
-      return null;
+      const errorResponse = e.response?.data;
+      set({ error: errorResponse?.message || e.message, loading: false });
+      return {
+        ok: false,
+        error: errorResponse?.errors || null,
+        message: errorResponse?.message || e.message,
+      };
     }
   },
 
@@ -61,7 +71,7 @@ export const useNotesStore = create((set, get) => ({
       }));
       get().setToast('noteDeleted');
     } catch (e) {
-      set({ error: e.message, loading: false });
+      set({ error: e.response?.data?.message || e.message, loading: false });
     }
   },
 }));

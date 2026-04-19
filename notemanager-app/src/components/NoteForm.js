@@ -4,30 +4,44 @@ import { useNotesStore } from '../store/notesStore';
 
 export default function NoteForm({ note, onDone }) {
   const { t } = useTranslation();
-  const { createNote, updateNote, loading } = useNotesStore();
+  const { createNote, updateNote, loading, setToast } = useNotesStore();
 
   const [title, setTitle] = useState(note?.title || '');
   const [content, setContent] = useState(note?.content || '');
-  const [error, setError] = useState('');
 
   useEffect(() => {
     setTitle(note?.title || '');
     setContent(note?.content || '');
-    setError('');
   }, [note]);
 
   const isEdit = !!note;
 
   const handleSubmit = async () => {
-    if (!title.trim()) { setError(t('titleRequired')); return; }
-    setError('');
-    let result;
-    if (isEdit) {
-      result = await updateNote(note.id, { title: title.trim(), content: content.trim() });
-    } else {
-      result = await createNote({ title: title.trim(), content: content.trim() });
+    const payload = {
+      title: title.trim(),
+      content: content.trim(),
+    };
+
+    const result = isEdit
+      ? await updateNote(note.id, payload)
+      : await createNote(payload);
+
+    if (result?.ok) {
+      onDone();
+      return;
     }
-    if (result) onDone();
+
+    if (result?.error) {
+      const backendError = Object.values(result.error)[0];
+      if (backendError) {
+        setToast(backendError);
+        return;
+      }
+    }
+
+    if (result?.message) {
+      setToast(result.message);
+    }
   };
 
   return (
@@ -46,12 +60,11 @@ export default function NoteForm({ note, onDone }) {
           className="form-input"
           type="text"
           value={title}
-          onChange={e => { setTitle(e.target.value); setError(''); }}
+          onChange={e => setTitle(e.target.value)}
           placeholder={t('titlePlaceholder')}
           autoFocus
           data-testid="note-title-input"
         />
-        {error && <div className="form-error">{error}</div>}
       </div>
 
       <div className="form-field">
