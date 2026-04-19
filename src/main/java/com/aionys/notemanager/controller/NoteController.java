@@ -5,6 +5,7 @@ import com.aionys.notemanager.model.dto.note.NoteResponseDto;
 import com.aionys.notemanager.model.entity.Note;
 import com.aionys.notemanager.service.note.INoteService;
 import com.aionys.notemanager.service.note.NoteServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,14 +36,14 @@ public class  NoteController {
     }
 
     @PostMapping
-    public ResponseEntity<NoteResponseDto> createNote(@RequestBody NoteRequestDto noteRequestDto) {
+    public ResponseEntity<NoteResponseDto> createNote(@Valid @RequestBody NoteRequestDto noteRequestDto) {
         NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(noteResponseDto);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<NoteResponseDto> updateNote(@PathVariable Long id,
-                                           @RequestBody NoteRequestDto noteRequestDto) {
+                                           @Valid @RequestBody NoteRequestDto noteRequestDto) {
         NoteResponseDto noteResponseDto = noteService.update(id, noteRequestDto);
         return ResponseEntity.ok(noteResponseDto);
     }
